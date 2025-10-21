@@ -1,0 +1,38 @@
+:root{
+  --bg: #f5eefc;
+  --primary: #5f2ea6;
+  --primary-dark: #3b1466;
+  --accent: #b98ef1;
+  --muted: #6b6b6b;
+  --white: #ffffff;
+}
+*{box-sizing:border-box}
+body{font-family:Inter, Arial, sans-serif;background:var(--bg);color:#222;margin:0}
+.app-root{min-height:100vh;display:flex;flex-direction:column}
+.header{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:transparent}
+.brand{display:flex;align-items:center;gap:0.75rem}
+.logo{width:64px;height:64px;object-fit:contain}
+.brand-text h1{margin:0;font-size:1.25rem;color:var(--primary-dark);letter-spacing:1px}
+.brand-text small{color:var(--muted)}
+.whatsapp-btn{background:linear-gradient(180deg,var(--primary),var(--primary-dark));color:var(--white);padding:.6rem 1rem;border-radius:8px;text-decoration:none;font-weight:600}
+.hero{padding:2rem;background:linear-gradient(90deg,var(--accent)10%,transparent 100%)}
+.hero-inner{display:flex;gap:1.5rem;align-items:center;max-width:1100px;margin:0 auto}
+.hero-logo{width:120px;height:120px;object-fit:contain}
+.cta{display:inline-block;margin-top:.6rem;padding:.6rem 1rem;border-radius:8px;background:var(--primary-dark);color:var(--white);text-decoration:none}
+.container{max-width:1100px;margin:2rem auto;padding:0 1rem}
+.section-title{color:var(--primary-dark);margin-bottom:1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+.card{background:var(--white);border-radius:12px;box-shadow:0 6px 18px rgba(50,40,80,0.06);overflow:hidden;display:flex;flex-direction:column}
+.card-media img{width:100%;height:180px;object-fit:cover}
+.card-body{padding:0.9rem}
+.card-body h3{margin:0 0 .4rem;color:var(--primary-dark)}
+.desc{color:var(--muted);font-size:.95rem;margin-bottom:.6rem}
+.meta{display:flex;align-items:center;justify-content:space-between}
+.price{color:var(--primary);font-weight:700}
+.ask{text-decoration:none;padding:.4rem .6rem;border-radius:8px;border:2px solid var(--primary);font-weight:600}
+.footer{margin-top:auto;padding:1.2rem;text-align:center;color:var(--muted)}
+/* welcome overlay */
+.welcome{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:40}
+.welcome-card{display:flex;flex-direction:column;align-items:center;gap:0.5rem;animation:fadeScale .8s ease}
+.welcome-logo{width:120px;height:120px;object-fit:contain}
+@keyframes fadeScale{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
