@@ -178,13 +178,13 @@ const products = ref([
 /* FONDOS TEMÁTICOS CON IMÁGENES DE EJEMPLO */
 .urban-card {
     /* Fondo para la colección Urbana (Hombre) */
-    background-image: url('https://picsum.photos/id/64/1000/1000'); /* Zapatos más street/skate */
+    background-image: url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3JqZmxkc2MzcWZiMHBvaW5objdzN294eXdvdzJ2MnpxM3VvaDdkNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mDYOWLsm3MnhPjKDDy/giphy.gif'); /* Zapatos más street/skate */
     background-color: #1565c0; 
 }
 
 .sports-card {
     /* Fondo para la colección Deportiva (Mujeres) */
-    background-image: url('https://picsum.photos/id/197/1000/1000'); /* Zapatos más de running/fitness */
+    background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3N2cWIzcGo2djNsdTB3eDd5azV0NzgyZGxjdHk0emxsaHFqMWx5ZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/L3REFNpuwb0ARx8iAF/giphy.gif'); /* Zapatos más de running/fitness */
     background-color: #2e7d32; 
 }
 
