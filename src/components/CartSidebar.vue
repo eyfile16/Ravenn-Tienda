@@ -3,21 +3,21 @@
     <div v-if="isCartOpen" class="cart-sidebar">
       <div class="cart-header">
         <h2>🛍️ Mi Carrito ({{ cartCount }})</h2>
-        <button @click="toggleCart" class="close-btn">×</button>
+        <button @click="toggleCart(false)" class="close-btn">×</button>
       </div>
 
       <div v-if="cart.length" class="cart-items">
         <div v-for="item in cart" :key="item.uniqueId" class="cart-item">
-          <img :src="item.images[0]" :alt="item.name" class="item-img" />
+          <img :src="item.images ? item.images[0] : ''" :alt="item.name" class="item-img" /> 
           
           <div class="item-details">
             <div class="item-title-row">
-                <span class="item-name">{{ item.name }}</span>
-                <span class="item-size">Talla: {{ item.size }}</span>
+              <span class="item-name">{{ item.name }}</span>
+              <span class="item-size">Talla: {{ item.size }}</span>
             </div>
             
             <div class="item-price-row">
-                <span class="item-price">${{ item.price.toLocaleString('es-CO') }} c/u</span>
+              <span class="item-price">${{ item.price.toLocaleString('es-CO') }} c/u</span>
             </div>
 
             <div class="item-actions">
@@ -64,21 +64,12 @@
 
 <script setup>
 import { useCart } from '../stores/cartStore';
-import { toRefs } from 'vue'; // 👈 1. IMPORTAR toRefs
 
-const cartStore = useCart();
-
-// 2. Usar toRefs para desestructurar las propiedades que son reactivas
-// (las que cambian, como isCartOpen y cart)
-const { 
-  isCartOpen, // AHORA es reactiva
-  WHATSAPP_NUMBER,
-  cart,       // AHORA es reactiva
-} = toRefs(cartStore);
-
-// 3. Las funciones (acciones) y computed properties se pueden desestructurar
-// del objeto store directamente, ya que son funciones o computed()
+// 💡 Desestructuración directa de la store customizada
 const {
+  isCartOpen,
+  WHATSAPP_NUMBER,
+  cart,
   toggleCart, 
   cartCount, 
   subtotal, 
@@ -86,12 +77,11 @@ const {
   incrementQuantity, 
   decrementQuantity, 
   removeItem 
-} = cartStore; // O useCart() si quieres desestructurarlas en una línea
+} = useCart();
 </script>
 
 <style scoped>
-/* [Tus estilos aquí] - No los incluyo por brevedad, pero mantenlos igual. */
-/* ... */
+/* Tu CSS se mantiene sin cambios */
 .slide-fade-enter-active, .slide-fade-leave-active { transition: transform 0.3s ease-out; }
 .slide-fade-enter-from, .slide-fade-leave-to { transform: translateX(100%); }
 .cart-sidebar {

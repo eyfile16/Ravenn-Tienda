@@ -68,7 +68,7 @@
                             <p class="description">{{ selectedProduct.description }}</p>
                             
                             <div class="size-selector">
-                                <label>Talla (33-42):</label>
+                                <label>Talla (33-43):</label>
                                 <div class="size-options">
                                     <button 
                                         v-for="size in sizes" 
@@ -113,8 +113,9 @@ const { addToCart } = useCart();
 const searchTerm = ref('');
 const selectedBrand = ref(null);
 
-// RANGO DE TALLAS (33 a 42)
-const sizes = ref(Array.from({length: 10}, (_, i) => 33 + i)); 
+// RANGO DE TALLAS (33 a 43)
+// El límite se ha cambiado de 10 a 11 para incluir la talla 43 (33 + 10)
+const sizes = ref(Array.from({length: 11}, (_, i) => 33 + i)); 
 const selectedSize = ref(null);
 const attemptToAdd = ref(false);
 
@@ -159,7 +160,7 @@ const products = ref([
     { id: 128, name: 'AIR FORCE ONE NEGRO', price: 100000, brand: 'Nike', image: 'https://brooklynshop.co/cdn/shop/files/Imagen_de_WhatsApp_2024-10-09_a_las_21.14.49_840f5256.jpg?v=1728527181&width=360', description: 'El clásico negro, esencial en tu armario.' }, 
     { id: 129, name: 'BOTA AIR FORCE ONE', price: 115000, brand: 'Nike', image: 'https://i.pinimg.com/236x/d2/b4/81/d2b481ff6b3ead52df0c1d589b215972.jpg', description: 'Versión bota para mayor soporte y estilo.' }, 
     
-    { id: 130, name: 'VANS NEGRO', price: 100000, brand: 'Vans', image: 'https://m.media-amazon.com/images/I/81I8fSOAXkL._AC_SY300_QL30_.jpg', description: 'Clásico skater en negro total.' }, 
+    { id: 130, name: 'VANS NEGRO', price: 100000, brand: 'Vans', image: 'https://m.media-amazon.com/images/I/81I8fSOAXkL._UY900_.jpg', description: 'Clásico skater en negro total.' }, 
     
     { id: 131, name: 'JORDAN 1 LOW TRAVIS SCOTT CAFÉ', price: 110000, brand: 'Jordan', image: 'https://cucutatenis.com/cdn/shop/files/7171E3AC-E44F-4485-A57F-C5AC55F6DCBC.jpg?v=1712158684', description: 'Colaboración exclusiva en tonos tierra.' }, 
     

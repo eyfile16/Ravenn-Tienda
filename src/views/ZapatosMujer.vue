@@ -108,13 +108,17 @@ const searchTerm = ref('');
 const selectedBrand = ref(null);
 
 // --- ESTADO DEL MODAL / TALLAS ---
-const sizes = ref(Array.from({length: 10}, (_, i) => 33 + i)); // RANGO DE TALLAS: 33 a 42
+// MODIFICACIÓN: Aumentado el rango para incluir la talla 43
+// Anteriormente: Array.from({length: 10}, (_, i) => 33 + i) daba de 33 a 42 (10 tallas)
+// Ahora: Array.from({length: 11}, (_, i) => 33 + i) dará de 33 a 43 (11 tallas)
+const sizes = ref(Array.from({length: 11}, (_, i) => 33 + i)); // RANGO DE TALLAS: 33 a 43
 const selectedSize = ref(null);
 const attemptToAdd = ref(false); 
 const showModal = ref(false);
 const selectedProduct = ref(null);
 
 // --- PRODUCTOS DEPORTIVOS (LISTA COMPLETA) ---
+// ... (El array de productos se mantiene sin cambios)
 const products = ref([
     { id: 1, name: 'NIKE P-6000', price: 120000, brand: 'Nike', image: 'https://standshop.com.co/wp-content/uploads/2025/09/a741251e-fb5d-4b41-92be-5e3793fc204f.jpeg', description: 'Deportivas clásicas con diseño futurista.' }, 
     { id: 2, name: 'NIKE P-6000 BLACK', price: 120000, brand: 'Nike', image: 'https://tenisshoponline.com/images/articulos/0790947c1de3dbf28d05db2ffe026500.jpeg', description: 'Deportivas clásicas con diseño futurista.' }, 
@@ -139,7 +143,7 @@ const products = ref([
     { id: 21, name: 'NIKE CORTEZ BLANCO', price: 110000, brand: 'Nike', image: 'https://sumerlabs.com/default/image-tool-lambda?new-width=0&new-height=0&new-quality=25&url-image=https://sumerlabs.com/prod/catalogue/b618174bea20d0fddb3384e38f1956eeeb0fd9fd/cb241e22-2784-4242-aeb5-9de6d64424d1.jpg', description: 'Clásico de los 70s, ligero y con estilo retro.' },
     { id: 22, name: 'NIKE CORTEZ ROJO', price: 110000, brand: 'Nike', image: 'https://cucutatenis.com/cdn/shop/files/E4E60371-12FE-4EC7-BEB1-E363EE6B691A.jpg?v=1738855943&width=600', description: 'Clásico de los 70s, ligero y con estilo retro.' },
     { id: 23, name: 'NIKE BAILLELI BLANCO', price: 110000, brand: 'Nike', image: 'https://zshopp.com/wp-content/uploads/2024/08/Tenis-Zapatillas-Nike-Bailleli-Unisex-9.webp', description: 'Diseño ligero y transpirable ideal para el día a día.' }, 
-    { id: 24, name: 'NIKE BAILLELI GRIS', price: 110000, brand: 'Nike', image: 'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQuM_3O8GLi-Ha6jzy-Sfceu0VZqW2BwVheQ8qPv2NGlONmi7R9', description: 'Diseño ligero y transpirable ideal para el día a día.' }, 
+    { id: 24, name: 'NIKE BAILLELI GRIS', price: 110000, brand: 'Nike', image: 'https://evoo7.com/cdn/shop/files/Imagen_de_WhatsApp_2025-03-08_a_las_23.32.39_dd97b9b6_823d8ca1-4201-41c4-806c-8f548ed5707c.jpg?v=1746130582&width=416', description: 'Diseño ligero y transpirable ideal para el día a día.' }, 
     { id: 25, name: 'NIKE BAILLELI NEGRO', price: 110000, brand: 'Nike', image: 'https://sjinfinity.store/cdn/shop/files/1739918507IMG-20250215-WA0010.jpg?v=1746908873&width=1445', description: 'Diseño ligero y transpirable ideal para el día a día.' },
     { id: 26, name: 'NIKE BAILLELI CEBRA', price: 110000, brand: 'Nike', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1jVMXxlu-szwmeMwCuJUJ09HgRorCAUQKbhBPPUEbxdXl9h1j', description: 'Diseño ligero y transpirable con patrón cebra.' },
     { id: 27, name: 'NIKE RUN V2K METALICOS', price: 120000, brand: 'Nike', image: 'https://olimpoxxi.com/wp-content/uploads/2025/05/Imagen-de-WhatsApp-2025-05-27-a-las-18.16.12_1663ea77.jpg', description: 'Runner moderno y versátil en tonos metálicos.' }, 
@@ -157,10 +161,10 @@ const products = ref([
     { id: 39, name: 'ADIDAS ULTRA BOOST 2 NEGRA', price: 115000, brand: 'Adidas', image: 'https://bysterlin.store/cdn/shop/files/WhatsAppImage2025-02-28at16.38.45_1.jpg?v=1750344611&width=1946', description: 'Diseño actualizado y elegante en negro.' },
     { id: 40, name: 'ADIDAS ULTRA BOOST 2 GRIS', price: 115000, brand: 'Adidas', image: 'https://viari.com.co/cdn/shop/files/GISSALMONM_1.jpg?v=1738702537&width=1445', description: 'Modelo deportivo con detalles modernos en gris.' },
     { id: 41, name: 'ADIDAS ULTRA BOOST 2 BLANCO', price: 115000, brand: 'Adidas', image: 'https://cucutatenis.com/cdn/shop/files/8C20A342-3175-4E6B-9259-FBB909947E31.jpg?v=1731012575&width=720', description: 'Versión limpia y versátil en color blanco.' },
-    { id: 42, name: 'NIKE SKATE BLANCO', price: 110000, brand: 'Nike', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTmIYvLHUvj6kTLdelRxA_rQvPn-l1tmn7yVmAglKHc7uRrmJW', description: 'Estilo de skate casual y resistente.' }, 
-    { id: 43, name: 'NIKE SKATE BEIGE', price: 110000, brand: 'Nike', image: 'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSaTJFnJuLi1WPOlhagGLGQo3Ff6Rl0zXTLLVu5JjcTzMRE_0pt', description: 'Estilo de skate casual y resistente.' },
+    { id: 42, name: 'NIKE SKATE BLANCO', price: 110000, brand: 'Nike', image: 'https://cucutatenis.com/cdn/shop/files/D06E45D6-5C99-4570-B8AB-91518F17F54E.jpg?v=1747929865&width=600', description: 'Estilo de skate casual y resistente.' }, 
+    { id: 43, name: 'NIKE SKATE BEIGE', price: 110000, brand: 'Nike', image: 'https://calistorecol.com/cdn/shop/files/12386C57-9BDE-41BB-A865-B34E596649E9.jpg?v=1751090460', description: 'Estilo de skate casual y resistente.' },
     { id: 44, name: 'NIKE SKATE GRIS', price: 110000, brand: 'Nike', image: 'https://tiendacreta.com/cdn/shop/files/TenisSkate_Imagen_1.webp?v=1758075920', description: 'Estilo de skate casual y resistente.' },
-    { id: 45, name: 'NIKE SKATE ROSA', price: 110000, brand: 'Nike', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLZdCh-YQp5q3y1DuCGXdgGCerC7KJfTqcs-I_NkPIc99vwql9', description: 'Estilo de skate casual y resistente.' },
+    { id: 45, name: 'NIKE SKATE ROSA', price: 110000, brand: 'Nike', image: 'https://cdn.shopify.com/s/files/1/0582/3381/5153/files/89e87cc6-b6c4-4892-8094-20ad437c473e.jpg?v=1748462597', description: 'Estilo de skate casual y resistente.' },
     { id: 46, name: 'HUGO BOSS BLANCO', price: 115000, brand: 'Hugo Boss', image: 'https://cucutatenis.com/cdn/shop/files/6EE2D0F3-1D2E-4E95-8B5F-E50268901081.jpg?v=1758637372&width=600', description: 'Diseño elegante y minimalista de la marca Hugo Boss.' },
     { id: 47, name: 'HUGO BOSS MIEL', price: 115000, brand: 'Hugo Boss', image: 'https://cucutatenis.com/cdn/shop/files/8468EFDB-04C8-4789-8371-E12F9ABC30EA.jpg?v=1758637327&width=600', description: 'Diseño elegante y minimalista de la marca Hugo Boss.' },
     { id: 48, name: 'HUGO BOSS AZUL', price: 115000, brand: 'Hugo Boss', image: 'https://cucutatenis.com/cdn/shop/files/D652F631-E719-45A5-88DB-999BC448C164.jpg?v=1758637186&width=600', description: 'Diseño elegante y minimalista de la marca Hugo Boss.' },
@@ -172,6 +176,7 @@ const products = ref([
     { id: 54, name: 'TN AMARILLO', price: 115000, brand: 'Nike', image: 'https://cymstore.com.uy/cdn/shop/files/WhatsAppImage2024-10-17at21.24.57.jpg?v=1745205800&width=533', description: 'Modelo TN con detalles en amarillo llamativo.' },
     { id: 55, name: 'TN MORADO', price: 115000, brand: 'Nike', image: 'https://moraazul-col.com/cdn/shop/files/1744640518IMG_0256.jpg?v=1749422718&width=1445', description: 'Modelo TN con detalles en morado.' }, 
 ]);
+// ... (El resto de la lógica y funciones se mantienen sin cambios)
 
 // --- LÓGICA DE FILTRADO Y BÚSQUEDA ---
 const uniqueBrands = computed(() => {
