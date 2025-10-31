@@ -34,7 +34,7 @@
                 class="product-card"
             >
                 <div class="image-wrapper">
-                    <img :src="product.image" :alt="product.name" class="product-img" />
+                    <img :src="product.image" :alt="product.name" class="product-img-display" />
                 </div>
                 
                 <div class="product-info">
@@ -60,7 +60,7 @@
                     
                     <div class="detail-container">
                         <div class="image-gallery">
-                            <img :src="selectedProduct.image" :alt="selectedProduct.name" class="main-image" />
+                            <img :src="selectedProduct.image" :alt="selectedProduct.name" class="main-image-modal" />
                         </div>
                         
                         <div class="product-summary">
@@ -99,27 +99,19 @@
         </transition>
     </div>
 </template>
-  
+ 
 <script setup>
 import { ref, computed } from 'vue';
-
-// 🛑 IMPORTACIÓN DE TU STORE REAL
 import { useCart } from '../stores/cartStore'; 
 
-// Desestructura la función addToCart de tu store
 const { addToCart } = useCart();
 
-// --- ESTADO DE FILTROS ---
 const searchTerm = ref('');
 const selectedBrand = ref(null);
-
-// RANGO DE TALLAS (33 a 43)
-// El límite se ha cambiado de 10 a 11 para incluir la talla 43 (33 + 10)
 const sizes = ref(Array.from({length: 11}, (_, i) => 33 + i)); 
 const selectedSize = ref(null);
 const attemptToAdd = ref(false);
 
-// --- PRODUCTOS URBANOS (lista mantenida) ---
 const products = ref([
     { id: 101, name: 'LOUIS VUITTON SKATE BLACK', price: 120000, brand: 'Louis Vuitton', image: 'https://cucutatenis.com/cdn/shop/files/81FDBF8B-E120-4C9D-AB79-066D4D26A63B.jpg?v=1741355708&width=720', description: 'Modelo Black elegante.' }, 
     { id: 102, name: 'LOUIS VUITTON SKATE WHITE', price: 120000, brand: 'Louis Vuitton', image: 'https://standshop.com.co/wp-content/uploads/2024/08/8dccb9f7-0f60-42a2-af6c-ba8d52286322.jpg', description: 'Modelo White limpio.' }, 
@@ -155,7 +147,7 @@ const products = ref([
     { id: 124, name: 'ADIDAS SUPERSTAR', price: 105000, brand: 'Adidas', image: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/ac2a3b3f2f1447a9804a216bcfc2c9e3_9366/Tenis_Superstar_Blanco_JP9678_01_00_standard.jpg', description: 'El icónico modelo con puntera de concha.' }, 
     { id: 125, name: 'ADIDAS GRAND COURT NEGRO', price: 100000, brand: 'Adidas', image: 'https://resources.claroshop.com/medios-plazavip/s2/10687/3941168/62f6de561d617-e829505b-169d-4265-a2fa-3615cda5bc18-1600x1600.jpg', description: 'Comodidad total para uso casual.' }, 
     
-    { id: 126, name: 'AIR FORCE ONE BLACK W', price: 100000, brand: 'Nike', image: 'https://tenisi.co/cdn/shop/files/D30E061C-E119-472B-AE64-9DC9C8B1BA92.jpg?v=1733287154&width=1445', description: 'El clásico en color negro mate.' }, 
+    { id: 126, name: 'AIR FORCE ONE BLACK W', price: 100000, brand: 'Nike', image: 'https://tenisi.co/cdn/shop/files/D30E061C-E119-472B-AE64-9DC9C6B1BA92.jpg?v=1733287154&width=1445', description: 'El clásico en color negro mate.' }, 
     { id: 127, name: 'AIR FORCE ONE BLANCO', price: 100000, brand: 'Nike', image: 'https://veintedocetenis.com/cdn/shop/files/SaveClip.App_450424133_18040368568906292_6164722752785247851_n.jpg?v=1737590513', description: 'El clásico blanco, esencial en tu armario.' }, 
     { id: 128, name: 'AIR FORCE ONE NEGRO', price: 100000, brand: 'Nike', image: 'https://brooklynshop.co/cdn/shop/files/Imagen_de_WhatsApp_2024-10-09_a_las_21.14.49_840f5256.jpg?v=1728527181&width=360', description: 'El clásico negro, esencial en tu armario.' }, 
     { id: 129, name: 'BOTA AIR FORCE ONE', price: 115000, brand: 'Nike', image: 'https://i.pinimg.com/236x/d2/b4/81/d2b481ff6b3ead52df0c1d589b215972.jpg', description: 'Versión bota para mayor soporte y estilo.' }, 
@@ -200,7 +192,6 @@ const products = ref([
     { id: 156, name: 'JORDAN RETRO 1 LOW GRIS', price: 105000, brand: 'Jordan', image: 'https://cucutatenis.com/cdn/shop/files/RETROLOWGRIS.jpg?v=1698760345', description: 'Diseño cómodo y casual en beige.' }
 ]);
 
-// --- LÓGICA DE FILTRADO Y BÚSQUEDA (sin cambios) ---
 const uniqueBrands = computed(() => {
     const brands = new Set(products.value.map(p => p.brand));
     return Array.from(brands).sort();
@@ -213,7 +204,7 @@ const selectBrand = (brand) => {
 const filteredProducts = computed(() => {
     let filtered = products.value;
     const searchLower = searchTerm.value.toLowerCase();
-
+    
     if (searchLower) {
         filtered = filtered.filter(product => 
             product.name.toLowerCase().includes(searchLower) ||
@@ -228,8 +219,6 @@ const filteredProducts = computed(() => {
     return filtered;
 });
 
-
-// --- LÓGICA DEL MODAL (sin cambios) ---
 const showModal = ref(false);
 const selectedProduct = ref(null);
 
@@ -249,7 +238,6 @@ const closeModal = () => {
     document.body.style.overflow = ''; 
 };
 
-// --- FUNCIÓN DEL CARRITO CON VALIDACIÓN DE TALLA (sin cambios) ---
 const addItemToCart = (product) => {
     attemptToAdd.value = true;
     if (!selectedSize.value) {
@@ -260,35 +248,158 @@ const addItemToCart = (product) => {
         id: product.id, 
         name: product.name, 
         price: product.price, 
-        images: [product.image], 
+        image: product.image, 
         size: selectedSize.value 
     }); 
     
+    // Si la store añade el producto (no hay error de talla), cierra el modal
     closeModal(); 
 };
 </script>
 
+---
+
 <style scoped>
-/* --- TÍTULO Y SUBTÍTULO MODIFICADOS --- */
-.view-title { 
-    /* El título h2 fue eliminado del template, por lo que este estilo ya no se aplica directamente */
-    /* Mantengo la clase por si se decide agregar un título diferente en el futuro o para otros elementos */
-    font-size: 2.5rem; 
-    margin-bottom: 2rem; 
-    color: #7b4397; 
-    /* Puedes borrar este bloque si estás seguro de que no habrá h2 con esta clase aquí */
+/* GENERAL STYLES */
+.product-page { 
+    padding: 20px; 
+    text-align: center; 
+    background-color: #f8f8f8;
 }
 
-/* Ajuste para que los controles de filtro suban un poco */
+/* FILTER CONTROLS */
 .filter-controls {
     max-width: 1200px;
-    /* Ajustado para reducir el espacio superior si el h2 fue eliminado */
     margin: 0 auto 30px auto; 
     padding: 0 20px;
     text-align: left;
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+}
+.search-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+.brand-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.btn-brand {
+    padding: 8px 15px;
+    border: 1px solid #7b4397; 
+    border-radius: 20px;
+    background-color: #f8f8f8;
+    color: #7b4397;
+    cursor: pointer;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.btn-brand:hover {
+    background-color: #e0e0e0;
+}
+.btn-brand.active-brand {
+    background-color: #7b4397;
+    color: white;
 }
 
-/* --- AJUSTES CLAVE DEL BOTÓN DE DETALLE --- */
+/* PRODUCT GRID */
+.product-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 30px; 
+    justify-items: center; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+}
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #cc0000;
+    font-size: 1.2rem;
+    padding: 40px;
+    background-color: #ffe5e5;
+    border-radius: 8px;
+}
+
+/* PRODUCT CARD STYLES */
+.product-card { 
+    background: #ffffff; 
+    border: 1px solid #eeeeee;
+    border-radius: 10px; 
+    overflow: hidden; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); 
+    transition: transform 0.3s, box-shadow 0.3s; 
+    width: 100%; 
+    max-width: 350px; 
+    min-height: 500px; 
+    display: flex; 
+    flex-direction: column;
+}
+.product-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
+}
+
+/* IMAGEN DE LA CARD */
+.image-wrapper {
+    width: 100%;
+    padding-top: 100%; 
+    position: relative;
+    overflow: hidden;
+    background-color: #ffffff; /* ¡Cambiado a blanco! */
+    border-bottom: 1px solid #eee;
+}
+.product-img-display { 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    object-fit: contain; 
+    transition: transform 0.3s;
+    /* Eliminamos el padding aquí si queremos que la imagen ocupe todo el espacio.
+       Si necesitas un pequeño margen interno, puedes volver a añadirlo. */
+    /* padding: 10px; */ 
+    box-sizing: border-box;
+}
+.product-card:hover .product-img-display {
+    transform: scale(1.05); 
+}
+
+.product-info { 
+    padding: 15px; 
+    text-align: left; 
+    flex-grow: 1; 
+    display: flex; 
+    flex-direction: column;
+    justify-content: space-between; 
+}
+.product-info h3 { 
+    font-size: 1.3rem; 
+    margin-top: 0; 
+    margin-bottom: 5px; 
+    color: #333;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; 
+    -webkit-box-orient: vertical;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    min-height: 4.8rem; 
+    line-height: 1.6rem; 
+}
+.price { 
+    font-size: 1.4rem; 
+    font-weight: bold; 
+    color: #f07b14;
+    margin-bottom: 10px;
+}
 .btn-detail { 
     width: 100%; 
     padding: 12px;
@@ -303,139 +414,14 @@ const addItemToCart = (product) => {
     margin-top: auto; 
     box-shadow: 0 4px 8px rgba(240, 123, 20, 0.4); 
 }
-
 .btn-detail:hover { 
     background-color: #ff6a00; 
     transform: translateY(-2px); 
     box-shadow: 0 6px 12px rgba(255, 106, 0, 0.5); 
     border-color: white; 
 }
-/* ------------------------------------------- */
 
-/* --- ESTILOS DE LA CARD Y GRID (Mantenidos o ligeramente ajustados) --- */
-.product-card { 
-    background: #ffffff; 
-    border: 1px solid #eeeeee;
-    border-radius: 10px; 
-    overflow: hidden; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); 
-    transition: transform 0.3s, box-shadow 0.3s; 
-    width: 100%; 
-    max-width: 350px; 
-    height: 480px;
-    display: flex; 
-    flex-direction: column;
-}
-.product-card:hover { 
-    transform: translateY(-5px); 
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
-}
-.image-wrapper {
-    width: 100%;
-    height: 280px;
-    overflow: hidden;
-}
-.product-img { 
-    width: 100%; 
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s;
-}
-.product-card:hover .product-img {
-    transform: scale(1.05);
-}
-.product-info { 
-    padding: 15px; 
-    text-align: left; 
-    flex-grow: 1; 
-    display: flex; 
-    flex-direction: column;
-}
-.product-info h3 { 
-    font-size: 1.4rem; 
-    margin-top: 0; 
-    margin-bottom: 5px; 
-    color: #333;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; 
-    -webkit-box-orient: vertical;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    height: 4.8rem; 
-}
-.price { 
-    font-size: 1.5rem; 
-    font-weight: bold; 
-    color: #f07b14;
-    margin-bottom: 15px; 
-}
-/* [Resto de estilos de filtros, grid y modal sin cambios mayores] */
-
-.search-input {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-.brand-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-.btn-brand {
-    padding: 8px 15px;
-    border: 1px solid #7b4397; 
-    border-radius: 20px;
-    background-color: #f8f8f8;
-    color: #7b4397;
-    cursor: pointer;
-    font-size: 0.9rem;
-    white-space: nowrap;
-}
-.btn-brand:hover {
-    background-color: #e0e0e0;
-}
-.btn-brand.active-brand {
-    background-color: #7b4397;
-    color: white;
-}
-.no-results {
-    grid-column: 1 / -1;
-    text-align: center;
-    color: #cc0000;
-    font-size: 1.2rem;
-    padding: 40px;
-    background-color: #ffe5e5;
-    border-radius: 8px;
-}
-.validation-message {
-    color: #cc0000;
-    font-weight: bold;
-    margin-top: 15px;
-    border: 1px solid #ffcccc;
-    padding: 10px;
-    background-color: #ffe5e5;
-    border-radius: 4px;
-    text-align: center;
-}
-.product-page { 
-    padding: 20px; 
-    text-align: center; 
-    background-color: #f8f8f8;
-}
-.product-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-    gap: 30px; 
-    justify-items: center; 
-    max-width: 1200px; 
-    margin: 0 auto; 
-}
-
+/* MODAL STYLES */
 .modal-fade-enter-active, .modal-fade-leave-active { 
     transition: opacity 0.3s ease; 
 }
@@ -486,13 +472,17 @@ const addItemToCart = (product) => {
     flex: 1; 
     min-width: 350px; 
 }
-.main-image { 
+.main-image-modal { 
     width: 100%; 
     height: 400px; 
-    object-fit: cover; 
+    object-fit: contain; 
+    background-color: #f0f0f0; 
     border-radius: 8px; 
     margin-bottom: 10px; 
+    padding: 10px; 
+    box-sizing: border-box;
 }
+
 .product-summary { 
     flex: 1; 
     padding-top: 20px; 
@@ -548,6 +538,16 @@ const addItemToCart = (product) => {
     font-weight: bold; 
     color: #f07b14;
 }
+.validation-message {
+    color: #cc0000;
+    font-weight: bold;
+    margin-top: 15px;
+    border: 1px solid #ffcccc;
+    padding: 10px;
+    background-color: #ffe5e5;
+    border-radius: 4px;
+    text-align: center;
+}
 .action-buttons button { 
     padding: 15px 30px; 
     border: none; 
@@ -565,7 +565,25 @@ const addItemToCart = (product) => {
 .btn-add:hover { 
     background-color: #ff6a00; 
 }
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
+    .product-grid {
+        gap: 20px; 
+    }
+    .product-card {
+        min-height: 520px; 
+    }
+    .product-info h3 { 
+        font-size: 1.2rem; 
+        min-height: 4.5rem; 
+        line-height: 1.5rem;
+    }
+    .price {
+        font-size: 1.3rem; 
+        margin-bottom: 8px;
+    }
+
     .modal-content { 
         padding: 10px; 
     }
@@ -576,7 +594,7 @@ const addItemToCart = (product) => {
     .image-gallery { 
         min-width: 100%; 
     }
-    .main-image { 
+    .main-image-modal { 
         height: 300px; 
     }
     .product-summary h1 { 

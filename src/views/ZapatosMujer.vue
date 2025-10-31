@@ -1,7 +1,7 @@
 <template>
     <div class="product-page">
         
-<div class="filter-controls">
+        <div class="filter-controls">
             <input 
                 type="text" 
                 v-model="searchTerm" 
@@ -35,11 +35,16 @@
                 :key="product.id" 
                 class="product-card"
             >
-                <img :src="product.image" :alt="product.name" class="product-img" />
+                <div class="image-wrapper">
+                    <img :src="product.image" :alt="product.name" class="product-img-display" />
+                </div>
+
                 <div class="product-info">
                     <h3>{{ product.name }}</h3>
                     <p class="price">${{ product.price.toLocaleString('es-CO') }}</p>
-                    <button class="btn-detail" @click="openModal(product)">Seleccionar Talla</button>
+                    <button class="btn-detail" @click="openModal(product)">
+                        <i class="fas fa-shoe-prints"></i> Seleccionar Talla
+                    </button>
                 </div>
             </div>
 
@@ -55,7 +60,7 @@
                     
                     <div class="detail-container">
                         <div class="image-gallery">
-                            <img :src="selectedProduct.image" :alt="selectedProduct.name" class="main-image" />
+                            <img :src="selectedProduct.image" :alt="selectedProduct.name" class="main-image-modal" />
                         </div>
 
                         <div class="product-summary">
@@ -65,7 +70,7 @@
                             </p>
                             
                             <div class="size-selector">
-                                <label>Talla (33-42):</label>
+                                <label>Talla (33-43):</label>
                                 <div class="size-options">
                                     <button 
                                         v-for="size in sizes" 
@@ -108,17 +113,14 @@ const searchTerm = ref('');
 const selectedBrand = ref(null);
 
 // --- ESTADO DEL MODAL / TALLAS ---
-// MODIFICACIÓN: Aumentado el rango para incluir la talla 43
-// Anteriormente: Array.from({length: 10}, (_, i) => 33 + i) daba de 33 a 42 (10 tallas)
-// Ahora: Array.from({length: 11}, (_, i) => 33 + i) dará de 33 a 43 (11 tallas)
-const sizes = ref(Array.from({length: 11}, (_, i) => 33 + i)); // RANGO DE TALLAS: 33 a 43
+// RANGO DE TALLAS: 33 a 43 (11 tallas)
+const sizes = ref(Array.from({length: 11}, (_, i) => 33 + i)); 
 const selectedSize = ref(null);
 const attemptToAdd = ref(false); 
 const showModal = ref(false);
 const selectedProduct = ref(null);
 
 // --- PRODUCTOS DEPORTIVOS (LISTA COMPLETA) ---
-// ... (El array de productos se mantiene sin cambios)
 const products = ref([
     { id: 1, name: 'NIKE P-6000', price: 120000, brand: 'Nike', image: 'https://standshop.com.co/wp-content/uploads/2025/09/a741251e-fb5d-4b41-92be-5e3793fc204f.jpeg', description: 'Deportivas clásicas con diseño futurista.' }, 
     { id: 2, name: 'NIKE P-6000 BLACK', price: 120000, brand: 'Nike', image: 'https://tenisshoponline.com/images/articulos/0790947c1de3dbf28d05db2ffe026500.jpeg', description: 'Deportivas clásicas con diseño futurista.' }, 
@@ -176,7 +178,6 @@ const products = ref([
     { id: 54, name: 'TN AMARILLO', price: 115000, brand: 'Nike', image: 'https://cymstore.com.uy/cdn/shop/files/WhatsAppImage2024-10-17at21.24.57.jpg?v=1745205800&width=533', description: 'Modelo TN con detalles en amarillo llamativo.' },
     { id: 55, name: 'TN MORADO', price: 115000, brand: 'Nike', image: 'https://moraazul-col.com/cdn/shop/files/1744640518IMG_0256.jpg?v=1749422718&width=1445', description: 'Modelo TN con detalles en morado.' }, 
 ]);
-// ... (El resto de la lógica y funciones se mantienen sin cambios)
 
 // --- LÓGICA DE FILTRADO Y BÚSQUEDA ---
 const uniqueBrands = computed(() => {
@@ -245,6 +246,13 @@ const addItemToCart = (product) => {
 };
 </script>
 
+---
+
+## 🎨 Ajustes de Estilo (CSS)
+
+El principal cambio aquí es la introducción de **`.image-wrapper`** para gestionar el fondo blanco y la proporción, y el ajuste de los selectores de imagen en la tarjeta y en el modal.
+
+```vue
 <style scoped>
 /* ========================================================================= */
 /* ESTILOS GENERALES Y TÍTULOS */
@@ -263,11 +271,13 @@ const addItemToCart = (product) => {
     margin: 0 auto 30px auto; 
     padding: 0 20px;
     text-align: left;
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
 }
 .search-input {
     width: 100%;
     padding: 12px 15px;
-    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 1rem;
@@ -277,7 +287,6 @@ const addItemToCart = (product) => {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 20px;
 }
 .btn-brand {
     padding: 8px 15px;
@@ -327,7 +336,7 @@ const addItemToCart = (product) => {
     transition: transform 0.3s, box-shadow 0.3s; 
     width: 100%; 
     max-width: 350px; 
-    height: 460px; 
+    min-height: 500px; /* Ajuste para que el botón quede bien */
     display: flex; 
     flex-direction: column; 
 }
@@ -335,21 +344,44 @@ const addItemToCart = (product) => {
     transform: translateY(-5px); 
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
 }
-.product-img { 
-    width: 100%; 
-    height: 250px; 
-    object-fit: cover; 
-    display: block;
+
+/* --- NUEVOS ESTILOS PARA RELLENAR EL FONDO Y AJUSTAR LA IMAGEN --- */
+.image-wrapper {
+    width: 100%;
+    padding-top: 100%; /* Crea una proporción de 1:1 (cuadrado) */
+    position: relative;
+    overflow: hidden;
+    background-color: #ffffff; /* ¡FONDO BLANCO PARA RELLENAR! */
+    border-bottom: 1px solid #eee;
 }
+.product-img-display { /* Se cambió de .product-img a .product-img-display en el CSS */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    object-fit: contain; /* Mantiene la imagen completa dentro del cuadrado */
+    display: block;
+    transition: transform 0.3s;
+    padding: 10px; /* Pequeño margen interno opcional */
+    box-sizing: border-box;
+}
+.product-card:hover .product-img-display {
+    transform: scale(1.05); 
+}
+/* --- FIN DE NUEVOS ESTILOS DE IMAGEN --- */
+
+
 .product-info { 
     padding: 15px; 
     text-align: left; 
     flex-grow: 1; 
     display: flex; 
     flex-direction: column;
+    justify-content: space-between; /* Empuja el botón al final */
 }
 .product-info h3 { 
-    font-size: 1.4rem; 
+    font-size: 1.3rem; 
     margin-top: 0; 
     margin-bottom: 5px; 
     color: #333; 
@@ -358,32 +390,34 @@ const addItemToCart = (product) => {
     -webkit-box-orient: vertical;
     overflow: hidden; 
     text-overflow: ellipsis; 
-    height: 4.8rem; 
+    min-height: 4.8rem; /* Asegura espacio para 3 líneas */
+    line-height: 1.6rem; 
 }
 .price { 
-    font-size: 1.5rem; 
+    font-size: 1.4rem; 
     font-weight: bold; 
     color: #f07b14; 
-    margin-bottom: 5px; 
+    margin-bottom: 10px; /* Espacio antes del botón */
 }
-/* BOTÓN DE SELECCIONAR TALLA - AJUSTADO AL DISEÑO SOLICITADO */
+/* BOTÓN DE SELECCIONAR TALLA - Mantenido */
 .btn-detail { 
     width: 100%; 
-    padding: 12px 10px; /* Más relleno vertical */
-    background-color: #ff6a00; /* Fondo morado */
+    padding: 12px;
+    background-color: #f07b14; /* Color consistente con el primer código */
     color: white; 
     border: none; 
-    border-radius: 8px; /* Más redondeado */
+    border-radius: 8px; 
     cursor: pointer; 
     font-size: 1rem; 
-    font-weight: bold; /* Texto en negrita */
+    font-weight: bold; 
     transition: background-color 0.3s, box-shadow 0.3s; 
     margin-top: auto; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra inicial (efecto de elevación) */
+    box-shadow: 0 4px 8px rgba(240, 123, 20, 0.4); 
 }
 .btn-detail:hover { 
-    background-color: #ff6a00; /* Morado más oscuro al pasar el ratón */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Sombra más fuerte al pasar el ratón */
+    background-color: #ff6a00; 
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 12px rgba(255, 106, 0, 0.5);
 }
 
 /* ========================================================================= */
@@ -419,12 +453,15 @@ const addItemToCart = (product) => {
     flex: 1; 
     min-width: 350px; 
 }
-.main-image { 
+.main-image-modal { /* CAMBIO: Se ajustó el selector en el CSS para coincidir con la versión corregida */
     width: 100%; 
     height: 400px; 
-    object-fit: cover; 
+    object-fit: contain; /* Usa 'contain' para mostrar la imagen completa */
+    background-color: #f0f0f0; /* Fondo del modal para la imagen */
     border-radius: 8px; 
     margin-bottom: 10px; 
+    padding: 10px; 
+    box-sizing: border-box;
 }
 .product-summary { 
     flex: 1; 
@@ -524,7 +561,7 @@ const addItemToCart = (product) => {
     .image-gallery { 
         min-width: 100%; 
     }
-    .main-image { 
+    .main-image-modal { 
         height: 300px; 
     }
     .product-summary h1 { 
